@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reckon: the verified track record for crypto callers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--panel:#141414;--line:#2a2a2a;--text:#ecebe6;--mute:#8d8d86;--acid:#b8ff00;--bad:#ff6b4a;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+main{max-width:720px;margin:0 auto;padding:40px 20px 72px}
+.demo{font-size:13px;color:var(--mute);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin-bottom:48px}
+h1{font-size:clamp(34px,8vw,56px);line-height:1.04;letter-spacing:-.03em;font-weight:800;margin:0 0 16px}
+.lede{color:var(--mute);font-size:17px;max-width:52ch;margin:0 0 48px}
+h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin:0 0 6px}
+.sub{color:var(--mute);font-size:14px;margin:0 0 18px}
+section{margin-bottom:56px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:6px}
+select,input[type=number],input[type=date]{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:11px 12px;font:inherit;font-size:16px}
+input[type=range]{width:100%;accent-color:var(--acid)}
+.conf{display:flex;justify-content:space-between;align-items:baseline}
+.conf output{font-size:22px;color:var(--acid)}
+button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--text);padding:10px 14px}
+button.main{background:var(--acid);color:#0a0a0a;border-color:var(--acid);font-weight:700;width:100%;padding:14px;font-size:16px;margin-top:18px}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--acid);outline-offset:2px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+@media(max-width:520px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{border-left:2px solid var(--line);padding-left:10px}
+.stat b{display:block;font-size:24px;font-weight:500}
+.stat span{font-size:12px;color:var(--mute)}
+.call{border-top:1px solid var(--line);padding:16px 0}
+.call:first-child{border-top:0}
+.call .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.claim{font-weight:700}
+.meta{font-size:12px;color:var(--mute);word-break:break-all;margin-top:6px}
+.lock{color:var(--acid)}
+.tag{font-size:12px;border:1px solid var(--line);border-radius:4px;padding:2px 8px}
+.tag.hit{color:var(--acid);border-color:var(--acid)}
+.tag.miss{color:var(--bad);border-color:var(--bad)}
+.sim{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap;font-size:13px;color:var(--mute)}
+.sim button{padding:6px 12px;font-size:13px}
+.empty{color:var(--mute);font-size:14px;padding:8px 0}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:420px}
+th{font-weight:400;color:var(--mute);text-align:left;font-size:12px;padding:0 8px 10px 0}
+td{padding:12px 8px 12px 0;border-top:1px solid var(--line)}
+tr.me td{color:var(--acid)}
+.note{font-size:13px;color:var(--mute);margin-top:14px}
+@media(prefers-reduced-motion:no-preference){.call.new{animation:in .5s ease-out}@keyframes in{from{background:rgba(184,255,0,.14)}to{background:transparent}}}
+</style>
+</head>
+<body>
+<main>
+  <p class="demo">Concept demo. Sample callers and simulated outcomes. In v1, price based calls resolve automatically from a public price feed.</p>
+
+  <h1>Make the call. Lock it. Get scored.</h1>
+  <p class="lede">Reckon is the verified track record for crypto callers. Every call is timestamped before the outcome. Nothing can be edited or deleted in the app. Your record becomes your proof.</p>
+
+  <section>
+    <h2>Log a call</h2>
+    <p class="sub">Price based calls only in v1. Pick a claim, a date and how sure you are.</p>
+    <div class="panel">
+      <div class="grid">
+        <div><label for="asset">Asset</label>
+          <select id="asset"><option>BTC</option><option>ETH</option><option selected>SOL</option><option>INJ</option></select></div>
+        <div><label for="dir">Direction</label>
+          <select id="dir"><option value="above" selected>Closes above</option><option value="below">Closes below</option></select></div>
+        <div><label for="target">Target price (USD)</label>
+          <input id="target" type="number" min="0" step="any" value="200" inputmode="decimal"></div>
+        <div><label for="deadline">Resolves on</label>
+          <input id="deadline" type="date"></div>
+      </div>
+      <div style="margin-top:18px">
+        <div class="conf"><label for="conf" style="margin:0">Confidence</label><output id="confOut" class="mono">70%</output></div>
+        <input id="conf" type="range" min="51" max="99" value="70">
+      </div>
+      <button class="main" id="lockBtn">Lock this call</button>
+      <p class="note" id="err" role="status"></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Your record</h2>
+    <p class="sub">Public profile of @you. Calls stay locked once posted.</p>
+    <div class="stats">
+      <div class="stat"><b class="mono" id="sCalls">0</b><span>Calls locked</span></div>
+      <div class="stat"><b class="mono" id="sRes">0</b><span>Resolved</span></div>
+      <div class="stat"><b class="mono" id="sHit">n/a</b><span>Hit rate</span></div>
+      <div class="stat"><b class="mono" id="sBrier">n/a</b><span>Brier score, lower is better</span></div>
+    </div>
+    <div class="panel" id="list"></div>
+    <p class="note">Brier score measures calibration. Saying 90% and being wrong costs far more than saying 55% and being wrong.</p>
+  </section>
+
+  <section>
+    <h2>Leaderboard</h2>
+    <p class="sub">Ranked by Brier score. Sample callers shown for the demo.</p>
+    <div class="panel scroll"><table id="board"></table></div>
+  </section>
+
+  <p class="note">v1 stamps each call with a hash and a timestamp. Onchain anchoring is planned for v2, so until then the honest claim is timestamped and publicly verifiable.</p>
+</main>
+
+<script>
+(function(){
+  var KEY="reckon_demo_calls";
+  var calls=[];
+  try{calls=JSON.parse(localStorage.getItem(KEY)||"[]");}catch(e){calls=[];}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(calls));}catch(e){}}
+  var $=function(id){return document.getElementById(id)};
+  var d=new Date();d.setDate(d.getDate()+7);
+  $("deadline").value=d.toISOString().slice(0,10);
+  $("conf").addEventListener("input",function(){$("confOut").textContent=this.value+"%"});
+
+  async function sha(str){
+    try{
+      var buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0")}).join("");
+    }catch(e){
+      var h=0;for(var i=0;i<str.length;i++){h=(h*31+str.charCodeAt(i))|0}
+      return ("00000000"+(h>>>0).toString(16)).slice(-8).repeat(8);
+    }
+  }
+
+  $("lockBtn").addEventListener("click",async function(){
+    var target=parseFloat($("target").value);
+    var date=$("deadline").value;
+    var err=$("err");err.textContent="";
+    if(!(target>0)){err.textContent="Enter a target price above zero.";return;}
+    if(!date||new Date(date)<=new Date()){err.textContent="Pick a resolve date in the future.";return;}
+    var c={id:Date.now(),asset:$("asset").value,dir:$("dir").value,target:target,deadline:date,conf:parseInt($("conf").value,10),ts:new Date().toISOString(),outcome:null};
+    c.hash=await sha(JSON.stringify([c.asset,c.dir,c.target,c.deadline,c.conf,c.ts]));
+    calls.unshift(c);save();render(c.id);
+    err.textContent="Locked. It now has a timestamp and a hash. There is no edit or delete.";
+  });
+
+  window.resolveCall=function(id,out){
+    calls.forEach(function(c){if(c.id===id&&c.outcome===null){c.outcome=out}});
+    save();render();
+  };
+
+  function stats(){
+    var r=calls.filter(function(c){return c.outcome!==null});
+    var hits=r.filter(function(c){return c.outcome===1}).length;
+    var brier=r.length?r.reduce(function(s,c){var p=c.conf/100;return s+Math.pow(p-c.outcome,2)},0)/r.length:null;
+    return{n:calls.length,res:r.length,hit:r.length?Math.round(hits/r.length*100):null,brier:brier};
+  }
+
+  function render(newId){
+    var s=stats();
+    $("sCalls").textContent=s.n;$("sRes").textContent=s.res;
+    $("sHit").textContent=s.hit===null?"n/a":s.hit+"%";
+    $("sBrier").textContent=s.brier===null?"n/a":s.brier.toFixed(2);
+    var list=$("list");
+    if(!calls.length){list.innerHTML='<p class="empty">No calls yet. Lock your first one above.</p>';}
+    else{
+      list.innerHTML=calls.map(function(c){
+        var claim=c.asset+" closes "+c.dir+" $"+c.target.toLocaleString()+" on "+c.deadline;
+        var tag=c.outcome===null?'<span class="tag">Pending</span>':(c.outcome===1?'<span class="tag hit">Hit</span>':'<span class="tag miss">Miss</span>');
+        var sim=c.outcome===null?'<div class="sim">Demo only, simulate the result: <button onclick="resolveCall('+c.id+',1)">Call was right</button><button onclick="resolveCall('+c.id+',0)">Call was wrong</button></div>':'';
+        return '<div class="call'+(c.id===newId?' new':'')+'"><div class="top"><span class="claim">'+claim+'</span>'+tag+'</div>'+
+          '<div class="meta mono"><span class="lock">Locked</span> at '+c.ts+' with '+c.conf+'% confidence<br>sha256 '+c.hash+'</div>'+sim+'</div>';
+      }).join("");
+    }
+    board(s);
+  }
+
+  function board(s){
+    var rows=[
+      {n:"@onchainmaren",calls:42,hit:64,brier:0.19},
+      {n:"@kano_flow",calls:31,hit:58,brier:0.22},
+      {n:"@alphaheron",calls:57,hit:49,brier:0.31},
+      {n:"@ser_moonvault",calls:23,hit:35,brier:0.41}
+    ];
+    if(s.res>0)rows.push({n:"@you",calls:s.n,hit:s.hit,brier:s.brier,me:true});
+    rows.sort(function(a,b){return a.brier-b.brier});
+    $("board").innerHTML='<tr><th>Rank</th><th>Caller</th><th>Calls</th><th>Hit rate</th><th>Brier</th></tr>'+
+      rows.map(function(r,i){return '<tr class="'+(r.me?'me':'')+'"><td class="mono">'+(i+1)+'</td><td>'+r.n+'</td><td class="mono">'+r.calls+'</td><td class="mono">'+r.hit+'%</td><td class="mono">'+r.brier.toFixed(2)+'</td></tr>'}).join("");
+  }
+  render();
+})();
+</script>
+</body>
+</html>
